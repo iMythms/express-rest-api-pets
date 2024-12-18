@@ -38,6 +38,29 @@ router.get('/:petId', async (req, res) => {
 	}
 })
 
+router.put('/:petId', async (req, res) => {
+	try {
+		let updatedPet = await Pet.findByIdAndUpdate(req.params.petId, req.body, {
+			new: true,
+		})
+		if (!updatedPet) {
+			res.status(404)
+			throw new Error('Pet Not Found!')
+		} else {
+			res.status(200).json({
+				message: `Successfully updated Pet with ID of ${req.params.petId}!`,
+				updated: updatedPet,
+			})
+		}
+	} catch (error) {
+		if (res.statusCode === 404) {
+			res.json({ error: error.message })
+		} else {
+			res.status(500).json({ error: error.message })
+		}
+	}
+})
+
 router.delete('/:petId', async (req, res) => {
 	try {
 		let deletedPet = await Pet.findByIdAndDelete(req.params.petId)
