@@ -26,8 +26,29 @@ router.get('/:petId', async (req, res) => {
 		if (!foundPet) {
 			res.status(404)
 			throw new Error('Pet Not Found!')
+		} else {
+			res.status(200).json(foundPet)
 		}
-		res.status(200).json(foundPet)
+	} catch (error) {
+		if (res.statusCode === 404) {
+			res.json({ error: error.message })
+		} else {
+			res.status(500).json({ error: error.message })
+		}
+	}
+})
+
+router.delete('/:petId', async (req, res) => {
+	try {
+		let deletedPet = await Pet.findByIdAndDelete(req.params.petId)
+		if (!deletedPet) {
+			res.status(404)
+			throw new Error('Pet Not Found!')
+		} else {
+			res.status(200).json({
+				message: `Successfully deleted Pet with ID of ${req.params.petId}!`,
+			})
+		}
 	} catch (error) {
 		if (res.statusCode === 404) {
 			res.json({ error: error.message })
