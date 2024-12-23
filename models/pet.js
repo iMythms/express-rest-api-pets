@@ -10,6 +10,7 @@ const petSchema = mongoose.Schema({
 		min: 0,
 	},
 	breed: String,
+	image: String,
 })
 
 const Pet = mongoose.model('Pet', petSchema)
